@@ -6,55 +6,49 @@ import lejos.robotics.*;
 
 public class ColorSensors2 {
 	public static void main(String args[]){
-		ColorHTSensor cs= new ColorHTSensor(SensorPort.S2);
+		ColorHTSensor cs= new ColorHTSensor(SensorPort.S1);
 		
-		for(int i =0; i<10; i++){
+		for(int i =0; i<15; i++){
 			Color color = cs.getColor();
-			System.out.println("RGB =("+ color.getRed()+","+color.getGreen()+","+color.getBlue()+")");
-			int verif = cs.getColorID();
-			switch (verif){
-			case 0:
+			int r = color.getRed();
+			int g = color.getGreen();
+			int b = color.getBlue();
+			System.out.println("RGB:"+ r+","+g+","+b+")");
+			if(r>200 && g>40 && g<80 && b>20 && b<60){
 				System.out.println("Couleur detecte: RED");
-				break;
-			case 1:
+			}
+			else if(r>20 && r<130 && g>70 && g<220 && b>60 && b<120){//ok
 				System.out.println("Couleur detecte: GREEN");
-				break;
-			case 2:
+			}
+			else if(r>20 && r<70 && g>50 && g<100 && b>95 && b<190){
 				System.out.println("Couleur detecte: BLUE");
-				break;
-			case 3:
-				System.out.println("Couleur detecte: YELLOW");
-				break;
-			case 4:
-				System.out.println("Couleur detecte: MAGENTA");
-				break;
-			case 5:
-				System.out.println("Couleur detecte: ORANGE");
-				break;
-			case 6:
+			}
+			else if(r>190 && g>230 && b>250){
 				System.out.println("Couleur detecte: WHITE");
-				break;
-			case 7:
+			}
+			else if(r<60 && g<70 && b<70){
 				System.out.println("Couleur detecte: BLACK");
-				break;
-			case 8:
-				System.out.println("Couleur detecte: PINK");
-				break;
-			case 9:
-				System.out.println("Couleur detecte: GRAY");
-				break;
-			case 10:
-				System.out.println("Couleur detecte: LIGHT GRAY");
-				break;
-			case 11:
-				System.out.println("Couleur detecte: DARK GRAY");
-				break;
-			case 12:
+			}
+			else if(r>190 && g>160 && b>50 && b<180){//ok
+				System.out.println("Couleur detecte: YELLOW");
+			}
+			else if(r>170 && g>80 && g<140 && b>40 && b<70){
+				System.out.println("Couleur detecte: ORANGE");
+			}
+			else if(r>20 && r<70 && g>90 && g<120 && b>90){
 				System.out.println("Couleur detecte: CYAN");
-				break;
-			default:
-				System.out.println("Couleur non detecte!!!");
-					
+			}
+			else if(r>100 && r<200 && g>30 && g<100 && b>40 && b<120){
+				System.out.println("Couleur detecte: PINK");
+			}
+			else if(r>60 && r<100 && g>40 && g<100 && b>80 && b<130){
+				System.out.println("Couleur detecte: MAGETA");
+			}
+			else if(r>90 && r<170 && g>70 && g<190 && b>50 && b<180){
+				System.out.println("Couleur detecte: GRAY");
+			}
+			else {
+				System.out.println("Couleur non detecte!");
 			}
 			
 			Button.waitForAnyPress();
