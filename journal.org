@@ -1,3 +1,11 @@
+
+* <2016-12-9>
+** Fait:
+   - Algo de color recognition qui semble marcher (!)
+** A faire:
+ - Resoudre un probleme avec la memoire HW
+ - Algo pour suivre une ligne
+
 * <2016-11-25>
 ** Fait:
    - Etalonnage qui ne fonctionne pas bien
