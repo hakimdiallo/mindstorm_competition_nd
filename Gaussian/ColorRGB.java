@@ -1,4 +1,4 @@
-package Gaussian2;
+package Gaussian;
 
 
 public class ColorRGB {

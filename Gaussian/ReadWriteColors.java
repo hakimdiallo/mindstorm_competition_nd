@@ -1,4 +1,4 @@
-package Gaussian2;
+package Gaussian;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import lejos.nxt.Button;
 import lejos.nxt.Sound;
 
 class ReadWriteColors{
@@ -31,7 +30,7 @@ class ReadWriteColors{
 		bw.close();
 	}
 	
-	public boolean exist(){
+	public boolean fileExist(){
 		return file.exists();
 	}
 	
@@ -46,7 +45,7 @@ class ReadWriteColors{
 		}
 	}
 	
-	public double[] readColors(ColorRGB cc,int numColor){
+	public double[] readColors(ColorRGB cc, int numColor){
 		Sample s= null;
 		ColorRGB c;
 		double[] distances = new double[numColor];
@@ -60,7 +59,7 @@ class ReadWriteColors{
 			while(br.available()>4){
 				s = new Sample();
 				while(i<4){
-					c= new ColorRGB(br.readInt(), br.readInt(),br.readInt());
+					c = new ColorRGB(br.readInt(), br.readInt(),br.readInt());
 					s.addColor(c);
 					i++;
 				}
