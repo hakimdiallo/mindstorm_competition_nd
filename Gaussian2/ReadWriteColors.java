@@ -67,8 +67,6 @@ class ReadWriteColors{
 			    g = new GaussianParam(s);
 				d = g.mahalanobis(cc);
 				i=0;
-				System.out.println("D["+(index+1)+"]:"+d);
-				Button.waitForAnyPress();
 				distances[index++]=d;
 			}
 			br.close();

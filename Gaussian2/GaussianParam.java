@@ -52,7 +52,7 @@ public class GaussianParam {
 	public double[][] inverseMatrix(double[][] A){
 		double[][] result = new double[3][3];
 		if(detMatrix(A) == 0){
-			System.out.println("SAME VALUE TAKEN");
+			//System.out.println("SAME VALUE TAKEN");
 			for(int i=0;i<3;i++){
 				for(int j=0;j<3;j++){
 					if(i==j) result[i][j]=1;
