@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 class ReadWriteColors{
 	private File file;
-	private final String filename = "color.txt";
+	//private final String filename = "color.txt";
 	
 	public ReadWriteColors(){
-		file = new File(filename);
+		file = new File("color.txt");
 	}
 	
 	public boolean exist(){

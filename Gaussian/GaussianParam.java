@@ -1,15 +1,14 @@
-
-import java.util.ArrayList;
+package Gaussian2;
 
 public class GaussianParam {
 	private double[] mean;
 	private double[][] variance;
 	
-	/* Le constructeur calcule le mean et variance a partir d'un echantillon*/
-	public GaussianParam(ArrayList<ColorRGB> s){
+	/* The constructor calculate the medium and variance from the sample*/
+	public GaussianParam(Sample s){
 		mean = new double[3];
 		variance = new double[3][3];
-		/* Calcul mean */
+		/* Calculate mean */
 		ColorRGB sum= new ColorRGB(0,0,0);
 		for (int i = 0; i < s.size(); i++) {	
 			ColorRGB c = s.get(i);
@@ -19,8 +18,8 @@ public class GaussianParam {
 		mean[0] = sum.getRed()/s.size();
 		mean[1] = sum.getGreen()/s.size();
 		mean[2] = sum.getBlue()/s.size();
-
-		/* Calcul variance */
+		
+		/* Calculate variance */
 		for (int i = 0; i < s.size(); i++) {		
 			double[] temp = new double[3];
 			ColorRGB c = s.get(i);
@@ -51,12 +50,18 @@ public class GaussianParam {
 	}
 	
 	public double[][] inverseMatrix(double[][] A){
+		double[][] result = new double[3][3];
 		if(detMatrix(A) == 0){
-			System.out.println("The sample taken is not good enough!!! RETRY");
-			return null;
+			//System.out.println("SAME VALUE TAKEN");
+			for(int i=0;i<3;i++){
+				for(int j=0;j<3;j++){
+					if(i==j) result[i][j]=1;
+					else result[i][j]=0;
+				}
+			}
+			return result;
 		}
 		double invdet = 1/detMatrix(A);
-		double[][] result = new double[3][3];
 		result[0][0] =  (A[1][1]*A[2][2]-A[1][2]*A[2][1])*invdet;
 		result[1][0] =  (A[1][2]*A[2][0]-A[1][0]*A[2][2])*invdet;
 		result[2][0] =  (A[1][0]*A[2][1]-A[1][1]*A[2][0])*invdet;
@@ -74,7 +79,6 @@ public class GaussianParam {
 		t[0] = c.getRed() - mean[0];
 		t[1] = c.getGreen()- mean[1];
 		t[2] = c.getBlue()- mean[2];
-		
 		double[][] d = inverseMatrix(variance);
 		double v1=0, v2=0, v3=0;
 		
@@ -82,9 +86,7 @@ public class GaussianParam {
 		v2 = t[1]*(t[0]*d[0][1] + t[1]*d[1][1]+t[2]*d[2][1]);
 		v3 = t[2]*(t[0]*d[0][2] + t[1]*d[1][2]+t[2]*d[2][2]);
 
-		//System.out.println("Distance= "+(v1+v2+v3));
-
-		return v1+v2+v3;
+		return Math.sqrt(v1+v2+v3);
 	}
 	
 

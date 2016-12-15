@@ -1,20 +1,13 @@
+package Gaussian2;
+
 
 public class ColorRGB {
 	private int red,green,blue;
-	private String name;
 	
 	public ColorRGB(int r,int g,int b){
 		red = r;
 		green= g;
 		blue = b;
-	}
-	
-	public void setName(String n){
-		name = n;
-	}
-	
-	public String getName(){
-		return name;
 	}
 	
 	public int getRed(){
@@ -29,6 +22,9 @@ public class ColorRGB {
 		return blue;
 	}
 	
+	public String toString(){
+		return red+";"+green+";"+blue;
+	}
 	public ColorRGB addColor(ColorRGB c){
 		int r = this.red + c.getRed();
 		int g = this.green+ c.getGreen();
