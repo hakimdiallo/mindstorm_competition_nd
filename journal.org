@@ -1,4 +1,13 @@
-
+* <2017-01-25>
+*** Fait
+    - Robot qui suive le ligne, mais lentement
+*** A faire
+    - Faire deplacer le robot a toute vitesse sur les lignes droites
+* Ven 16 déc 2016 10:34:45 CET
+** Fait:
+   - Suivi de ligne même courbe (test sur la nouvelle piste)
+** A faire:
+   - Revoir l'algorithme pour accélerer le robot: 1° peut-être augmenter la vitesse de base, 2° faire un algorithme adaptatif qui modifie dynamiquement la vitesse des roues pour rattraper la courbe.
 * <2016-12-9>
 ** Fait:
    - Algo de color recognition qui semble marcher (!)
