@@ -19,23 +19,58 @@ public class LineFollower {
 		return colorSelector.colorsAreSaved();
 	}
 	
+	public void turnRight(int turn){
+		Motor.A.setSpeed(300+turn);
+		Motor.C.setSpeed(100-turn);
+		Motor.A.forward();
+		Motor.C.forward();
+	}
+	
+	public void turnLeft(int turn){
+		Motor.A.setSpeed(100-turn);
+		Motor.C.setSpeed(300+turn);
+		Motor.A.forward();
+		Motor.C.forward();
+	}
+	
+	public void stop(){
+		Motor.A.stop();
+		Motor.C.stop();
+	}
+	
 	public void followLine(){
+		boolean turn = true;
+		int numRight=0, numLeft=0;
 		while(!Button.ESCAPE.isDown()){
 			/* When robot saw the main color, he goes left*/
 			Color color = colorSelector.getColorFromSensor();
 			ColorRGB c = new ColorRGB(color.getRed(),color.getGreen(),color.getBlue());
-			if(colorSelector.isColorFollowed(c)){
-				Motor.A.setSpeed(300);
-				Motor.C.setSpeed(100);
-				Motor.A.forward();
-				Motor.C.forward();
-			}
-			/*when robot is out of line, he goes right*/
-			else{
-				Motor.C.setSpeed(300);
-				Motor.A.setSpeed(100);
-				Motor.A.forward();
-				Motor.C.forward();
+			if(colorSelector.isColorStopped(c)){
+				stop();
+			} else {
+				while(!colorSelector.isColorFollowed(c) && turn){
+					numLeft =0;
+					numRight++;
+					if(numRight>100) stop();
+					else turnRight(numRight);
+					Color color2 = colorSelector.getColorFromSensor();
+					ColorRGB c2 = new ColorRGB(color2.getRed(),color2.getGreen(),color2.getBlue());
+					if(colorSelector.isColorFollowed(c2)){
+						turn = !turn;
+					}
+					
+				}
+				while(!colorSelector.isColorFollowed(c) && !turn){
+					numRight =0;
+					numLeft++;
+					if(numLeft>100) stop();
+					else turnLeft(numLeft);
+					Color color2 = colorSelector.getColorFromSensor();
+					ColorRGB c2 = new ColorRGB(color2.getRed(),color2.getGreen(),color2.getBlue());
+					if(!colorSelector.isColorFollowed(c2)){
+						turn = !turn;
+					}
+				}
 			}
 		}
 	}

@@ -13,8 +13,10 @@ public class ColorSelector {
 	private Color color;
 	private ColorRGB c;
 	private static final int READTIMES = 4;
-	private static final int NBRECOLORS = 2;
+	private static final int NBRECOLORS = 3;
 	private static final int COLORFOLLOWED = 1;
+	private static final int COLORSTOP = 3;
+	//private static final int COLORLEFT = 3;
 	
 	public ColorSelector(){
 		try {
@@ -28,23 +30,30 @@ public class ColorSelector {
 	public void chooseColorsAndSaveThem(){
 		try {
 			rwc.openWriter();
-			System.out.println("Select the Color to follow...");
+			System.out.println("Followed color...");
 			for(int i=0;i<READTIMES;i++){
 				Button.waitForAnyPress();
 				color = cs.getColor();
 				c = new ColorRGB(color.getRed(),color.getGreen(),color.getBlue());
 				rwc.writeColors(c);
 			}
-			System.out.println("Select other colors...");
+			System.out.println("Edge color...");
 			for(int i=0;i<READTIMES;i++){
 				Button.waitForAnyPress();
 				color = cs.getColor();
 				c = new ColorRGB(color.getRed(),color.getGreen(),color.getBlue());
 				rwc.writeColors(c);
 			}
-			System.out.println("Select ENTER for other colors!!!");
-			while(!Button.ESCAPE.isDown()){
-				System.out.println("Color "/*+(numColor+1)*/+"...");
+			System.out.println("Arret color...");
+			for(int i=0;i<READTIMES;i++){
+				Button.waitForAnyPress();
+				color = cs.getColor();
+				c = new ColorRGB(color.getRed(),color.getGreen(),color.getBlue());
+				rwc.writeColors(c);
+			}
+			/*System.out.println("Select ENTER for other colors!!!");
+			while(Button.ESCAPE.isDown()){
+				System.out.println("Color "+"...");
 				for(int i=0;i<4;i++){
 					Button.waitForAnyPress();
 					color = cs.getColor();
@@ -53,7 +62,7 @@ public class ColorSelector {
 				}
 				//numColor++;
 				System.out.println("Color saved");
-			}
+			}*/
 			rwc.closeWriter();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -67,6 +76,17 @@ public class ColorSelector {
 	public boolean isColorFollowed(ColorRGB col){
 		return rwc.detectColor(rwc.readColors(col, NBRECOLORS)) == COLORFOLLOWED;
 	}
+	
+	public boolean isColorStopped(ColorRGB col){
+		return rwc.detectColor(rwc.readColors(col, NBRECOLORS)) == COLORSTOP;
+	}
+	/*public boolean isColorLeft(ColorRGB col){
+		return rwc.detectColor(rwc.readColors(col, NBRECOLORS)) == COLORLEFT;
+	}
+	
+	public boolean isColorRight(ColorRGB col){
+		return rwc.detectColor(rwc.readColors(col, NBRECOLORS)) == COLORRIGHT;
+	}*/
 	
 	public boolean colorsAreSaved(){
 		return rwc.fileExist();
