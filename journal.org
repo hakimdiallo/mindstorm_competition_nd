@@ -1,3 +1,9 @@
+* <2017-02-15>
+** Fait
+   - Un algo en zigzag
+** A faire
+   - Un algorithme qui ne zigzag pas.
+
 * <2017-01-25>
 *** Fait
     - Robot qui suive le ligne, mais lentement
