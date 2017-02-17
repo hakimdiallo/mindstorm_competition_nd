@@ -3,9 +3,18 @@ package Gaussian;
 import lejos.nxt.Button;
 import lejos.nxt.Motor;
 import lejos.robotics.Color;
+import lejos.util.Timer;
+import lejos.util.TimerListener;
 
-public class LineFollower {
+public class LineFollower implements TimerListener{
 	private ColorSelector colorSelector;
+	private final int SPEED_MAX = 300;
+	private final int SPEED_BASE = 100;
+	private int speed_right;
+	private int speed_left;
+	private final int STEP_SPEED = 10;
+	private Timer timer;
+	private boolean start;
 	
 	public LineFollower(){
 		colorSelector = new ColorSelector();
@@ -19,60 +28,77 @@ public class LineFollower {
 		return colorSelector.colorsAreSaved();
 	}
 	
-	public void turnRight(int turn){
-		Motor.A.setSpeed(300+turn);
-		Motor.C.setSpeed(100-turn);
+	public void move(){
+		Motor.A.setSpeed(speed_right);
+		Motor.C.setSpeed(speed_left);
 		Motor.A.forward();
 		Motor.C.forward();
-	}
-	
-	public void turnLeft(int turn){
-		Motor.A.setSpeed(100-turn);
-		Motor.C.setSpeed(300+turn);
-		Motor.A.forward();
-		Motor.C.forward();
-	}
-	
-	public void stop(){
-		Motor.A.stop();
-		Motor.C.stop();
 	}
 	
 	public void followLine(){
+		timer = new Timer(1000*60, this);
+		start = false;
+		speed_right = SPEED_BASE;
+		speed_left = SPEED_BASE;
+		int counter = 0;
+		int duration = 10;
 		boolean turn = true;
-		int numRight=0, numLeft=0;
 		while(!Button.ESCAPE.isDown()){
 			/* When robot saw the main color, he goes left*/
 			Color color = colorSelector.getColorFromSensor();
 			ColorRGB c = new ColorRGB(color.getRed(),color.getGreen(),color.getBlue());
-			if(colorSelector.isColorStopped(c)){
-				stop();
-			} else {
-				while(!colorSelector.isColorFollowed(c) && turn){
-					numLeft =0;
-					numRight++;
-					if(numRight>100) stop();
-					else turnRight(numRight);
-					Color color2 = colorSelector.getColorFromSensor();
-					ColorRGB c2 = new ColorRGB(color2.getRed(),color2.getGreen(),color2.getBlue());
-					if(colorSelector.isColorFollowed(c2)){
-						turn = !turn;
-					}
-					
+			if(colorSelector.isColorFollowed(c)){
+				if(start){
+					timer.stop();
+					start = false;
+					counter = 0;
+					duration = 10;
 				}
-				while(!colorSelector.isColorFollowed(c) && !turn){
-					numRight =0;
-					numLeft++;
-					if(numLeft>100) stop();
-					else turnLeft(numLeft);
-					Color color2 = colorSelector.getColorFromSensor();
-					ColorRGB c2 = new ColorRGB(color2.getRed(),color2.getGreen(),color2.getBlue());
-					if(!colorSelector.isColorFollowed(c2)){
-						turn = !turn;
-					}
+				if (speed_left != speed_right) {
+					speed_left = speed_right = Math.min(speed_left, speed_right);
+				}
+				move();
+				if (speed_left < SPEED_MAX && speed_right < SPEED_MAX) {
+					speed_left += STEP_SPEED;
+					speed_right += STEP_SPEED;
 				}
 			}
+			/*when robot is out of line, he goes right*/
+			else{
+				if(!start){
+					timer.start();
+					start = true;
+				}
+				if(counter < duration && turn){
+					if (speed_left > speed_right) {
+						speed_left = speed_right;
+					}
+					speed_left -= STEP_SPEED;
+					counter++;
+					if(counter == duration){
+						turn = false;
+						duration = duration * 2;
+					}
+				}
+				else{
+					if (speed_right > speed_left) {
+						speed_right = speed_left;
+					}
+					speed_right += STEP_SPEED;
+					counter--;
+					if (counter == 0) {
+						turn = false;
+					}
+				}
+				
+			}
 		}
+	}
+
+	@Override
+	public void timedOut() {
+		Motor.A.stop();
+		Motor.C.stop();
 	}
 
 }

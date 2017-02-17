@@ -51,7 +51,7 @@ class ReadWriteColors{
 		double[] distances = new double[numColor];
 		double d=0;
 		GaussianParam g;
-		int index = 0; // For array distances 
+		int index = 0; /* For array distances */
 		int i=0;
 		try {
 			FileInputStream fi = new FileInputStream(file);

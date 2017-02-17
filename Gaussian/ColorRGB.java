@@ -25,6 +25,7 @@ public class ColorRGB {
 	public String toString(){
 		return red+";"+green+";"+blue;
 	}
+	
 	public ColorRGB addColor(ColorRGB c){
 		int r = this.red + c.getRed();
 		int g = this.green+ c.getGreen();
