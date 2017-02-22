@@ -19,6 +19,7 @@ public class Main {
 			Button.ENTER.waitForPress();
 			lf.init();
 			Button.ENTER.waitForPress();
+			lf.followLine();
 		}
 	}
 

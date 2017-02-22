@@ -42,18 +42,6 @@ public class ColorSelector {
 				c = new ColorRGB(color.getRed(),color.getGreen(),color.getBlue());
 				rwc.writeColors(c);
 			}
-			System.out.println("Select ENTER for other colors!!!");
-			while(Button.ESCAPE.isUp()){
-				System.out.println("Color "/*+(numColor+1)*/+"...");
-				for(int i=0;i<4;i++){
-					Button.waitForAnyPress();
-					color = cs.getColor();
-					c = new ColorRGB(color.getRed(),color.getGreen(),color.getBlue());
-					rwc.writeColors(c);
-				}
-				//numColor++;
-				System.out.println("Color saved");
-			}
 			rwc.closeWriter();
 		} catch (IOException e) {
 			e.printStackTrace();

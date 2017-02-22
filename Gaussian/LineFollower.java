@@ -1,20 +1,22 @@
 package Gaussian;
 
+import java.util.TimerTask;
+
 import lejos.nxt.Button;
 import lejos.nxt.Motor;
 import lejos.robotics.Color;
+import lejos.robotics.navigation.DifferentialPilot;
 import lejos.util.Timer;
 import lejos.util.TimerListener;
 
 public class LineFollower implements TimerListener{
+	private static final int MAXSPEED = 500;
+	private static final int SPEED_STEP = 10;
+	private static int speed_gauche, speed_droite;
+	private static final int BASESPEED = 50;
 	private ColorSelector colorSelector;
-	private final int SPEED_MAX = 300;
-	private final int SPEED_BASE = 100;
-	private int speed_right;
-	private int speed_left;
-	private final int STEP_SPEED = 10;
 	private Timer timer;
-	private boolean start;
+	DifferentialPilot pilot ;
 	
 	public LineFollower(){
 		colorSelector = new ColorSelector();
@@ -29,76 +31,73 @@ public class LineFollower implements TimerListener{
 	}
 	
 	public void move(){
-		Motor.A.setSpeed(speed_right);
-		Motor.C.setSpeed(speed_left);
-		Motor.A.forward();
-		Motor.C.forward();
+		//pilot.setTravelSpeed(BASESPEED);
+		//pilot.forward();
+			Motor.A.setSpeed(speed_gauche);
+			Motor.C.setSpeed(speed_droite);
+			Motor.A.forward();
+			Motor.C.forward();			
 	}
 	
 	public void followLine(){
-		timer = new Timer(1000*60, this);
-		start = false;
-		speed_right = SPEED_BASE;
-		speed_left = SPEED_BASE;
-		int counter = 0;
-		int duration = 10;
+		pilot = new DifferentialPilot(2.25f, 5.5f, Motor.A, Motor.C);
+		timer = new Timer(1000, this);
+		speed_gauche = BASESPEED;
+		speed_droite = BASESPEED;
+		int angle = 0;
 		boolean turn = true;
+		boolean init = false;
 		while(!Button.ESCAPE.isDown()){
 			/* When robot saw the main color, he goes left*/
 			Color color = colorSelector.getColorFromSensor();
 			ColorRGB c = new ColorRGB(color.getRed(),color.getGreen(),color.getBlue());
-			if(colorSelector.isColorFollowed(c)){
-				if(start){
-					timer.stop();
-					start = false;
-					counter = 0;
-					duration = 10;
-				}
-				if (speed_left != speed_right) {
-					speed_left = speed_right = Math.min(speed_left, speed_right);
-				}
-				move();
-				if (speed_left < SPEED_MAX && speed_right < SPEED_MAX) {
-					speed_left += STEP_SPEED;
-					speed_right += STEP_SPEED;
-				}
-			}
-			/*when robot is out of line, he goes right*/
-			else{
-				if(!start){
-					timer.start();
-					start = true;
-				}
-				if(counter < duration && turn){
-					if (speed_left > speed_right) {
-						speed_left = speed_right;
-					}
-					speed_left -= STEP_SPEED;
-					counter++;
-					if(counter == duration){
-						turn = false;
-						duration = duration * 2;
-					}
-				}
-				else{
-					if (speed_right > speed_left) {
-						speed_right = speed_left;
-					}
-					speed_right += STEP_SPEED;
-					counter--;
-					if (counter == 0) {
-						turn = false;
-					}
+			if(colorSelector.isColorFollowed(c)){ /* When robot is in the line*/
+				angle = 5;
+				if (init) {
+					init = false;
 				}
 				
+				if(speed_gauche != speed_droite){
+					speed_gauche = speed_droite= Math.min(speed_gauche, speed_droite);
+				}
+				//move();
+				if(speed_gauche<MAXSPEED && speed_droite<MAXSPEED){
+					speed_gauche += SPEED_STEP;
+					speed_droite += SPEED_STEP;
+				}
+				move();
+			} else { /* When robot is outlaw*/
+				if (!init) {
+					speed_gauche = BASESPEED;
+					speed_droite = BASESPEED;
+					init = true;
+				}
+				
+				turn(angle,turn);
+				turn = !turn;
+				angle +=5;
 			}
 		}
+	}
+	
+	public void turn(int angle, boolean left){
+		pilot.setRotateSpeed(50);
+		pilot.setTravelSpeed(150);
+		if(left){
+			pilot.rotate(angle);
+			//Motor.A.rotate(angle, true);
+			//Motor.C.rotate(0-angle, true);
+		}else{
+			//Motor.C.rotate(-2*angle, true);
+			//Motor.C.rotate(angle, true);
+			pilot.rotate(-angle);
+		}
+		
+		
 	}
 
 	@Override
 	public void timedOut() {
-		Motor.A.stop();
-		Motor.C.stop();
 	}
 
 }
