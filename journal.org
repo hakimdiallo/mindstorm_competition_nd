@@ -1,3 +1,10 @@
+* <2017-03-08>
+** Fait
+   - Un algo trop lent
+** À Faire
+  - Un algo qui n'arrète pas le robot et qui n'avance pas trop hors des lignes
+ 
+
 * <2017-02-15>
 ** Fait
    - Un algo en zigzag
