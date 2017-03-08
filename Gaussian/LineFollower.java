@@ -20,6 +20,7 @@ public class LineFollower implements TimerListener{
 	private boolean gauche;
 	private boolean on;
 	private int delay;
+	private boolean init;
 	
 	public LineFollower(){
 		colorSelector = new ColorSelector();
@@ -89,16 +90,19 @@ public class LineFollower implements TimerListener{
 		//boolean turn = true;
 		on = false;
 		gauche = true;
-		delay = 5;
+		delay = 2000;
+		init = false;
 		while(!Button.ESCAPE.isDown()){
 			/* When robot saw the main color, he goes left*/
 			Color color = colorSelector.getColorFromSensor();
 			ColorRGB c = new ColorRGB(color.getRed(),color.getGreen(),color.getBlue());
 			if(colorSelector.isColorFollowed(c)){ /* When robot is in the line*/
 				if (on) {
+					gauche=true;
 					on = false;
-					delay = 5;
+					delay = 2000;
 					timer.stop();
+					init = false;
 				}
 				
 				if(speed_gauche != speed_droite){
@@ -117,11 +121,23 @@ public class LineFollower implements TimerListener{
 					timer.start();
 				}
 				if (gauche) {
-					speed_gauche = BASESPEED;
-					speed_droite = BASESPEED * 2;
+					System.out.println("A gauche!\n");
+					if (!init) {
+						speed_gauche = BASESPEED;
+						speed_droite = BASESPEED * 3;
+						init = true;
+					}
+					//speed_droite += SPEED_STEP;
+					//speed_gauche += SPEED_STEP;
 				}else{
-					speed_gauche = BASESPEED *2;
-					speed_droite = BASESPEED;
+					System.out.println("A droite!\n");
+					if (!init) {
+						speed_gauche = BASESPEED * 3;
+						speed_droite = BASESPEED;
+						init = true;
+					}
+					//speed_gauche += SPEED_STEP;
+					//speed_droite += SPEED_STEP;
 				}
 			}
 			move();
@@ -144,8 +160,12 @@ public class LineFollower implements TimerListener{
 
 	@Override
 	public void timedOut() {
-		gauche = false;
-		delay += 5;
+		System.out.println("Time is "+delay+"\n");
+		gauche = !gauche;
+		//on = false;
+		delay += 2000;
+		on = false;
+		init = false;
 	}
 
 }
