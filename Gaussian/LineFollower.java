@@ -2,6 +2,7 @@ package Gaussian;
 
 import lejos.nxt.Button;
 import lejos.nxt.Motor;
+import lejos.nxt.MotorPort;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.robotics.Color;
 import lejos.robotics.navigation.DifferentialPilot;
@@ -42,6 +43,12 @@ public class LineFollower implements TimerListener{
 		left.forward();
 		right.forward();
 	}
+	
+	public void move2(int leftPow, int rightPow){
+		MotorPort.C.controlMotor(leftPow, 1);
+		MotorPort.A.controlMotor(rightPow, 1);
+	}
+	
 	
 	public void followLine(){
 		timer = new Timer(1000, this);
@@ -141,6 +148,19 @@ public class LineFollower implements TimerListener{
 				}
 			}
 			move();
+		}
+	}
+	
+	public void followLine3(){
+		while(!Button.ESCAPE.isDown()){
+			/* When robot saw the main color, he goes left*/
+			Color color = colorSelector.getColorFromSensor();
+			ColorRGB c = new ColorRGB(color.getRed(),color.getGreen(),color.getBlue());
+			if(colorSelector.isColorFollowed(c)){ /* When robot is in the line*/
+				move2(80,0);
+			} else { /* When robot is outline*/
+				move2(0,80);
+			}
 		}
 	}
 	
