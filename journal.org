@@ -1,3 +1,12 @@
+* <2017-03-22>
+** Fait:
+ - Un robot qui suive la ligne très lentemente
+** À Faire:
+ - Amelioer l'algorithme: replacer un zig-zag bête avec quelque chose plus sofistiqué.
+
+
+
+
 * <2017-03-08>
 ** Fait
    - Un algo trop lent
