@@ -193,7 +193,6 @@ public class LineFollower implements TimerListener{
 		}
 	}
 	
-<<<<<<< HEAD
 	public void followLine6(){
 		//timer = new Timer(1000, this);
 		speed_gauche = BASESPEED;
@@ -258,8 +257,6 @@ public class LineFollower implements TimerListener{
 		}
 	}
 	
-=======
->>>>>>> f57ad370951b1ee0bdc86c8e6ca283f0505693dc
 	public void turn(int angle, boolean left){
 		//pilot.setRotateSpeed(50);
 		//pilot.setTravelSpeed(150);
