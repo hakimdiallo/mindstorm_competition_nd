@@ -13,7 +13,7 @@ public class LineFollower implements TimerListener{
 	private static final int MAXSPEED = 500;
 	private static final int SPEED_STEP = 5;
 	private static int speed_gauche, speed_droite;
-	private static final int BASESPEED = 50;
+	private static final int BASESPEED = 100;
 	private ColorSelector colorSelector;
 	private Timer timer;
 	DifferentialPilot pilot ;
@@ -161,6 +161,32 @@ public class LineFollower implements TimerListener{
 			} else { /* When robot is outline*/
 				move2(0,80);
 			}
+		}
+	}
+	
+	public void followLine5(){
+		int countDroite = 0;
+		int countGauche = 0;
+		speed_droite = BASESPEED;
+		speed_droite = BASESPEED;
+		while(!Button.ESCAPE.isDown()){
+			/* When robot saw the main color, he goes left*/
+			Color color = colorSelector.getColorFromSensor();
+			ColorRGB c = new ColorRGB(color.getRed(),color.getGreen(),color.getBlue());
+			if(colorSelector.isColorFollowed(c)){ /* When robot is in the line*/
+				if (countGauche != 0 && countDroite == countGauche) {
+					move();
+					countDroite = countGauche = 0;
+				}else {
+					move2(80,0);
+					countGauche++;
+				}
+				
+			} else { /* When robot is outline*/
+				move2(0,80);
+				countDroite++;
+			}
+			System.out.println("Gauche: "+countGauche+" Droite: "+countDroite);
 		}
 	}
 	
