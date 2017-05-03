@@ -1,3 +1,9 @@
+* <2017-05-03>
+** Fait:
+   - Améliorations de l'algorithme
+** A faire:
+   - Faire des mesures plus continues
+
 * <2017-03-22>
 ** Fait:
  - Un robot qui suive la ligne très lentemente
